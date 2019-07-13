@@ -1,9 +1,13 @@
-# cc-assessment
+# CC Assessment
 
-Test: Build a Purchase Order Module.
+Assessment Test
 
-Capture and Retrieve Suppliers. (Supplier Name)
+## Database Deployment
 
-Capture and Retrieve Products. (Product Code, Description, Price, Supplier)
+* [Hallo](https://github.com/AndriesDeKock/cc-assessment/blob/master/Hallo.txt)
 
-Capture and Retrieve Purchase Orders. (One order can only have one supplier, but many products)
+## Build With
+
+* Visual Studio 2015 Community Update 3
+* .Net Framework 4.6
+* SQL Server Management Studio v18.1

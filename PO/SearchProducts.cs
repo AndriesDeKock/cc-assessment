@@ -14,12 +14,15 @@
     /// </summary>
     public partial class SearchProducts : Form
     {
-        static SearchProducts thisForm;
-
         /// <summary>
         /// Defines the _products
         /// </summary>
         internal List<ProductModel> _products = new List<ProductModel>();
+
+        /// <summary>
+        /// Defines the thisForm
+        /// </summary>
+        private static SearchProducts thisForm;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SearchProducts"/> class.
@@ -31,54 +34,68 @@
         }
 
         /// <summary>
-        /// The SearchProducts_Load
+        /// The UnhideForm
         /// </summary>
-        /// <param name="sender">The sender<see cref="object"/></param>
-        /// <param name="e">The e<see cref="EventArgs"/></param>
-        private void SearchProducts_Load(object sender, EventArgs e)
+        public static void UnhideForm()
         {
-            RetrieveProducts();
-        }
-
-        /// <summary>
-        /// The RetrieveProducts
-        /// </summary>
-        private void RetrieveProducts()
-        {
-
-            dgvProds.Columns.Clear();
-
-            Task.Factory.StartNew(() =>
-            {
-                try
-                {
-                    _products = new DatabaseProcessor().RetrieveProducts("RetrieveProducts");
-
-                    Invoke((MethodInvoker)delegate
-                    {
-                        dgvProds.DataSource = new BindingList<ProductModel>(_products);
-                        FormatProductDGV(dgvProds);
-                    });
-
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message.ToString());
-                    Invoke((MethodInvoker)delegate
-                    {
-                        dgvProds.Columns.Clear();
-                    });
-                }
-
-            });
-        }
-
-        public static void UnhideForm() {
-
             thisForm.RetrieveProducts();
             thisForm.Show();
         }
 
+        /// <summary>
+        /// The btnNewSupp_Click
+        /// </summary>
+        /// <param name="sender">The sender<see cref="object"/></param>
+        /// <param name="e">The e<see cref="EventArgs"/></param>
+        private void btnNewSupp_Click(object sender, EventArgs e)
+        {
+            foreach (Form item in Application.OpenForms)
+            {
+                if (item is Products)
+                {
+                    item.Activate();
+                    return;
+                }
+            }
+
+            Products prods = new Products
+            {
+                MdiParent = this.MdiParent
+            };
+
+            Hide();
+            prods.ShowForm(false, null);
+        }
+
+        /// <summary>
+        /// The dgvProds_CellContentClick
+        /// </summary>
+        /// <param name="sender">The sender<see cref="object"/></param>
+        /// <param name="e">The e<see cref="DataGridViewCellEventArgs"/></param>
+        private void dgvProds_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex > -1 & e.ColumnIndex == dgvProds.Columns["colOpen"].Index)
+            {
+                foreach (Form item in Application.OpenForms)
+                {
+                    if (item is Products)
+                    {
+                        item.Activate();
+                        return;
+                    }
+                }
+
+                Products prods = new Products
+                {
+                    MdiParent = this.MdiParent
+                };
+
+                var product = _products.Single(p => p.Id == Convert.ToInt32(dgvProds.Rows[e.RowIndex].Cells["id"].Value));
+
+                Hide();
+                prods.ShowForm(true, product);
+            }
+        }
 
         /// <summary>
         /// The FormatProductDGV
@@ -108,8 +125,8 @@
             dgvProds.Columns["amount"].DefaultCellStyle.Format = "#,##0.00";
             dgvProds.Columns["amount"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 
-
-            DataGridViewButtonColumn colOpen = new DataGridViewButtonColumn {
+            DataGridViewButtonColumn colOpen = new DataGridViewButtonColumn
+            {
                 HeaderText = "",
                 Name = "colOpen",
                 Text = "Open",
@@ -119,53 +136,48 @@
 
             dgvProds.Columns.Add(colOpen);
 
-            dgvProds.Columns["description"].Width = dgvProds.Width - (dgvProds.Columns["id"].Width + dgvProds.Columns["code"].Width + 
+            dgvProds.Columns["description"].Width = dgvProds.Width - (dgvProds.Columns["id"].Width + dgvProds.Columns["code"].Width +
                 dgvProds.Columns["suppliername"].Width + dgvProds.Columns["amount"].Width + dgvProds.Columns["colOpen"].Width) - 20;
         }
 
-        private void dgvProds_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        /// <summary>
+        /// The RetrieveProducts
+        /// </summary>
+        private void RetrieveProducts()
         {
-            if (e.RowIndex > -1 & e.ColumnIndex == dgvProds.Columns["colOpen"].Index)
+            dgvProds.Columns.Clear();
+
+            Task.Factory.StartNew(() =>
             {
-                foreach (Form item in Application.OpenForms)
+                try
                 {
-                    if (item is Products)
+                    _products = new DatabaseProcessor().RetrieveProducts("RetrieveProducts");
+
+                    Invoke((MethodInvoker)delegate
                     {
-                        item.Activate();
-                        return;
-                    }
+                        dgvProds.DataSource = new BindingList<ProductModel>(_products);
+                        FormatProductDGV(dgvProds);
+                    });
                 }
-
-                Products prods = new Products {
-                    MdiParent = this.MdiParent
-                };
-
-                var product = _products.Single(p => p.Id == Convert.ToInt32(dgvProds.Rows[e.RowIndex].Cells["id"].Value));
-
-                Hide();
-                prods.ShowForm(true, product);
-            }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message.ToString());
+                    Invoke((MethodInvoker)delegate
+                    {
+                        dgvProds.Columns.Clear();
+                    });
+                }
+            });
         }
 
-        private void btnNewSupp_Click(object sender, EventArgs e)
+        /// <summary>
+        /// The SearchProducts_Load
+        /// </summary>
+        /// <param name="sender">The sender<see cref="object"/></param>
+        /// <param name="e">The e<see cref="EventArgs"/></param>
+        private void SearchProducts_Load(object sender, EventArgs e)
         {
-            foreach (Form item in Application.OpenForms)
-            {
-                if (item is Products)
-                {
-                    item.Activate();
-                    return;
-                }
-            }
-
-            Products prods = new Products {
-                MdiParent = this.MdiParent
-            };
-
-            Hide();
-            prods.ShowForm(false, null);
-
+            RetrieveProducts();
         }
     }
 }
-

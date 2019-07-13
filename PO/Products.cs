@@ -14,14 +14,14 @@
     public partial class Products : Form
     {
         /// <summary>
-        /// Defines the _product
-        /// </summary>
-        internal ProductModel _product = new ProductModel();
-
-        /// <summary>
         /// Defines the _edit
         /// </summary>
         internal bool _edit = false;
+
+        /// <summary>
+        /// Defines the _product
+        /// </summary>
+        internal ProductModel _product = new ProductModel();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Products"/> class.
@@ -32,21 +32,16 @@
         }
 
         /// <summary>
-        /// The txtProdPrice_Validated
+        /// The ShowForm
         /// </summary>
-        /// <param name="sender">The sender<see cref="object"/></param>
-        /// <param name="e">The e<see cref="EventArgs"/></param>
-        private void txtProdPrice_Validated(object sender, EventArgs e)
+        /// <param name="edit">The edit<see cref="bool"/></param>
+        /// <param name="product">The product<see cref="ProductModel"/></param>
+        public void ShowForm(bool edit, ProductModel product)
         {
-            var value = 0D;
+            _product = product;
+            _edit = edit;
 
-            if (double.TryParse(txtProdPrice.Text, out value))
-            {
-                txtProdPrice.Text = value.ToString();
-                return;
-            }
-
-            txtProdPrice.Text = 0.ToString();
+            Show();
         }
 
         /// <summary>
@@ -73,45 +68,74 @@
         }
 
         /// <summary>
-        /// The ValidateProductDetails
+        /// The DisableControls
         /// </summary>
-        /// <returns>The <see cref="bool"/></returns>
-        private bool ValidateProductDetails()
+        /// <param name="disabled">The disabled<see cref="bool"/></param>
+        private void DisableControls(bool disabled)
         {
+            txtProdDescr.Enabled = !disabled;
+            txtProdId.Enabled = !disabled;
+            txtProdPrice.Enabled = !disabled;
+            cboSupps.Enabled = !disabled;
 
-            if (string.IsNullOrEmpty(txtProdDescr.Text))
+            btnCreateSupplier.Enabled = !disabled;
+        }
+
+        private void PopulateProducts()
+        {
+            if (_product != null)
             {
-                MessageBox.Show("Please provide a product description", "Invalid", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                txtProdDescr.Focus();
-                return false;
+                txtProdDescr.Text = _product.Description;
+                txtProdPrice.Text = _product.Amount.ToString();
+                txtProdId.Text = _product.Code;
+                cboSupps.SelectedValue = _product.SupplierId;
             }
+        }
 
-            if (string.IsNullOrEmpty(txtProdId.Text))
-            {
-                MessageBox.Show("Please provide a product ID", "Invalid", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                txtProdId.Focus();
-                return false;
-            }
+        private void Products_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            SearchProducts.UnhideForm();
+        }
 
-            if (string.IsNullOrEmpty(txtProdPrice.Text))
-            {
-                MessageBox.Show("Please provide a product price", "Invalid", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                txtProdPrice.Focus();
-                return false;
-            }
-            else
-            {
-                var prodValue = Convert.ToDouble(txtProdPrice.Text);
+        /// <summary>
+        /// The Products_Load
+        /// </summary>
+        /// <param name="sender">The sender<see cref="object"/></param>
+        /// <param name="e">The e<see cref="EventArgs"/></param>
+        private void Products_Load(object sender, EventArgs e)
+        {
+            RetrieveSupplierList();
+        }
 
-                if (prodValue <= 0)
+        /// <summary>
+        /// The RetrieveSupplierList
+        /// </summary>
+        private void RetrieveSupplierList()
+        {
+            Task.Factory.StartNew(() =>
+            {
+                try
                 {
-                    MessageBox.Show("Product value must be larger than zero (0)", "Invalid", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    txtProdPrice.Focus();
-                    return false;
-                }
-            }
+                    var suppliers = new DatabaseProcessor().RetrieveSuppliers("RetrieveSuppliers");
 
-            return true;
+                    Invoke((MethodInvoker)delegate
+                    {
+                        cboSupps.DataSource = new BindingList<SupplierModel>(suppliers); ;
+                        cboSupps.DisplayMember = "Name";
+                        cboSupps.ValueMember = "Id";
+
+                        PopulateProducts();
+                    });
+                }
+                catch (Exception ex)
+                {
+                    Invoke((MethodInvoker)delegate
+                    {
+                        MessageBox.Show(ex.Message.ToString());
+                        DisableControls(true);
+                    });
+                }
+            });
         }
 
         /// <summary>
@@ -154,12 +178,29 @@
                         results.Close();
                     }
                 }
-
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message.ToString());
             }
+        }
+
+        /// <summary>
+        /// The txtProdPrice_Validated
+        /// </summary>
+        /// <param name="sender">The sender<see cref="object"/></param>
+        /// <param name="e">The e<see cref="EventArgs"/></param>
+        private void txtProdPrice_Validated(object sender, EventArgs e)
+        {
+            var value = 0D;
+
+            if (double.TryParse(txtProdPrice.Text, out value))
+            {
+                txtProdPrice.Text = value.ToString();
+                return;
+            }
+
+            txtProdPrice.Text = 0.ToString();
         }
 
         /// <summary>
@@ -172,19 +213,18 @@
             var prodAmount = 0D;
             var prodSuppId = 0;
 
-            Invoke((MethodInvoker)delegate { 
-
+            Invoke((MethodInvoker)delegate
+            {
                 prodCode = txtProdId.Text;
                 prodDescr = txtProdDescr.Text;
                 prodAmount = Convert.ToDouble(txtProdPrice.Text);
                 prodSuppId = Convert.ToInt32(cboSupps.SelectedValue);
-
             });
 
-            object[,] objParams = new object[,] { { "prodDescr", prodDescr }, 
-                                                    { "prodAmount", prodAmount }, 
-                                                    { "prodSuppId", prodSuppId }, 
-                                                    { "prodCode",  prodCode }, 
+            object[,] objParams = new object[,] { { "prodDescr", prodDescr },
+                                                    { "prodAmount", prodAmount },
+                                                    { "prodSuppId", prodSuppId },
+                                                    { "prodCode",  prodCode },
                                                     { "prodId", _product.Id } };
 
             try
@@ -210,105 +250,52 @@
 
                     results.Close();
                 }
-
-
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message.ToString());
             }
-
         }
 
         /// <summary>
-        /// The Products_Load
+        /// The ValidateProductDetails
         /// </summary>
-        /// <param name="sender">The sender<see cref="object"/></param>
-        /// <param name="e">The e<see cref="EventArgs"/></param>
-        private void Products_Load(object sender, EventArgs e)
+        /// <returns>The <see cref="bool"/></returns>
+        private bool ValidateProductDetails()
         {
-            RetrieveSupplierList();
-           
-        }
-
-        /// <summary>
-        /// The ShowForm
-        /// </summary>
-        /// <param name="edit">The edit<see cref="bool"/></param>
-        /// <param name="product">The product<see cref="ProductModel"/></param>
-        public void ShowForm(bool edit, ProductModel product)
-        {
-
-            _product = product;
-            _edit = edit;
-
-            Show();
-        }
-
-        /// <summary>
-        /// The RetrieveSupplierList
-        /// </summary>
-        private void RetrieveSupplierList()
-        {
-            Task.Factory.StartNew(() =>
+            if (string.IsNullOrEmpty(txtProdDescr.Text))
             {
-                try
-                {
-                    var suppliers = new DatabaseProcessor().RetrieveSuppliers("RetrieveSuppliers");
-
-                    Invoke((MethodInvoker)delegate
-                    {
-                        cboSupps.DataSource = new BindingList<SupplierModel>(suppliers); ;
-                        cboSupps.DisplayMember = "Name";
-                        cboSupps.ValueMember = "Id";
-
-                        PopulateProducts();
-
-                    });
-
-                  
-                }
-                catch (Exception ex)
-                {
-                    Invoke((MethodInvoker)delegate {
-                        MessageBox.Show(ex.Message.ToString());
-                        DisableControls(true);
-                    });
-                }
-
-            });
-        }
-
-        private void PopulateProducts() {
-
-            if (_product != null)
-            {
-                txtProdDescr.Text = _product.Description;
-                txtProdPrice.Text = _product.Amount.ToString();
-                txtProdId.Text = _product.Code;
-                cboSupps.SelectedValue = _product.SupplierId;
+                MessageBox.Show("Please provide a product description", "Invalid", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                txtProdDescr.Focus();
+                return false;
             }
-        }
 
-        /// <summary>
-        /// The DisableControls
-        /// </summary>
-        /// <param name="disabled">The disabled<see cref="bool"/></param>
-        private void DisableControls(bool disabled)
-        {
+            if (string.IsNullOrEmpty(txtProdId.Text))
+            {
+                MessageBox.Show("Please provide a product ID", "Invalid", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                txtProdId.Focus();
+                return false;
+            }
 
-            txtProdDescr.Enabled = !disabled;
-            txtProdId.Enabled = !disabled;
-            txtProdPrice.Enabled = !disabled;
-            cboSupps.Enabled = !disabled;
+            if (string.IsNullOrEmpty(txtProdPrice.Text))
+            {
+                MessageBox.Show("Please provide a product price", "Invalid", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                txtProdPrice.Focus();
+                return false;
+            }
+            else
+            {
+                var prodValue = Convert.ToDouble(txtProdPrice.Text);
 
-            btnCreateSupplier.Enabled = !disabled;
+                if (prodValue <= 0)
+                {
+                    MessageBox.Show("Product value must be larger than zero (0)", "Invalid", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    txtProdPrice.Focus();
+                    return false;
+                }
+            }
 
-        }
-
-        private void Products_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            SearchProducts.UnhideForm();
+            return true;
         }
     }
 }

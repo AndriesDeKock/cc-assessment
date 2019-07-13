@@ -13,14 +13,14 @@
     public partial class Suppliers : Form
     {
         /// <summary>
-        /// Defines the _supplier
-        /// </summary>
-        internal SupplierModel _supplier = new SupplierModel();
-
-        /// <summary>
         /// Defines the _edit
         /// </summary>
         internal bool _edit = false;
+
+        /// <summary>
+        /// Defines the _supplier
+        /// </summary>
+        internal SupplierModel _supplier = new SupplierModel();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Suppliers"/> class.
@@ -28,6 +28,18 @@
         public Suppliers()
         {
             InitializeComponent();
+        }
+
+        /// <summary>
+        /// The ShowForm
+        /// </summary>
+        /// <param name="edit">The edit<see cref="bool"/></param>
+        /// <param name="supplier">The supplier<see cref="SupplierModel"/></param>
+        public void ShowForm(bool edit, SupplierModel supplier)
+        {
+            _supplier = supplier;
+            _edit = edit;
+            Show();
         }
 
         /// <summary>
@@ -49,26 +61,21 @@
                     {
                         SaveSupplier();
                     }
-
                 });
             }
         }
 
         /// <summary>
-        /// The ValidateSupplierDetails
+        /// The PopulateSupplier
         /// </summary>
-        /// <returns>The <see cref="bool"/></returns>
-        private bool ValidateSupplierDetails()
+        private void PopulateSupplier()
         {
-
-            if (string.IsNullOrEmpty(txtSuppName.Text))
+            if (_supplier != null)
             {
-                MessageBox.Show("Please ensure the supplier name is provided.", "Invalid", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                txtSuppName.Focus();
-                return false;
+                btnCreateSupplier.Text = "Update";
+                txtSuppName.Text = _supplier.Name;
+                Application.DoEvents();
             }
-
-            return true;
         }
 
         /// <summary>
@@ -76,7 +83,6 @@
         /// </summary>
         private void SaveSupplier()
         {
-
             object[,] objParams = new object[,] { { "suppName", txtSuppName.Text } };
 
             try
@@ -102,8 +108,6 @@
 
                     results.Close();
                 }
-
-
             }
             catch (Exception ex)
             {
@@ -112,11 +116,30 @@
         }
 
         /// <summary>
+        /// The Suppliers_FormClosing
+        /// </summary>
+        /// <param name="sender">The sender<see cref="object"/></param>
+        /// <param name="e">The e<see cref="FormClosingEventArgs"/></param>
+        private void Suppliers_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            SearchSuppliers.UnhideForm();
+        }
+
+        /// <summary>
+        /// The Suppliers_Load
+        /// </summary>
+        /// <param name="sender">The sender<see cref="object"/></param>
+        /// <param name="e">The e<see cref="EventArgs"/></param>
+        private void Suppliers_Load(object sender, EventArgs e)
+        {
+            PopulateSupplier();
+        }
+
+        /// <summary>
         /// The UpdateSupplier
         /// </summary>
         private void UpdateSupplier()
         {
-
             object[,] objParams = new object[,] { { "suppName", txtSuppName.Text },
                                                     { "suppNo", _supplier.Id } };
 
@@ -143,8 +166,6 @@
 
                     results.Close();
                 }
-
-
             }
             catch (Exception ex)
             {
@@ -153,50 +174,19 @@
         }
 
         /// <summary>
-        /// The Suppliers_Load
+        /// The ValidateSupplierDetails
         /// </summary>
-        /// <param name="sender">The sender<see cref="object"/></param>
-        /// <param name="e">The e<see cref="EventArgs"/></param>
-        private void Suppliers_Load(object sender, EventArgs e)
+        /// <returns>The <see cref="bool"/></returns>
+        private bool ValidateSupplierDetails()
         {
-            PopulateSupplier();
-        }
-
-        /// <summary>
-        /// The ShowForm
-        /// </summary>
-        /// <param name="edit">The edit<see cref="bool"/></param>
-        /// <param name="supplier">The supplier<see cref="SupplierModel"/></param>
-        public void ShowForm(bool edit, SupplierModel supplier)
-        {
-
-            _supplier = supplier;
-            _edit = edit;
-            Show();
-        }
-
-        /// <summary>
-        /// The PopulateSupplier
-        /// </summary>
-        private void PopulateSupplier()
-        {
-
-            if (_supplier != null)
+            if (string.IsNullOrEmpty(txtSuppName.Text))
             {
-                btnCreateSupplier.Text = "Update";
-                txtSuppName.Text = _supplier.Name;
-                Application.DoEvents();
+                MessageBox.Show("Please ensure the supplier name is provided.", "Invalid", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                txtSuppName.Focus();
+                return false;
             }
-        }
 
-        /// <summary>
-        /// The Suppliers_FormClosing
-        /// </summary>
-        /// <param name="sender">The sender<see cref="object"/></param>
-        /// <param name="e">The e<see cref="FormClosingEventArgs"/></param>
-        private void Suppliers_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            SearchSuppliers.UnhideForm();
+            return true;
         }
     }
 }

@@ -22,7 +22,6 @@
         /// <returns>The <see cref="List{SupplierModel}"/></returns>
         public List<SupplierModel> RetrieveSuppliers(string SqlCmd)
         {
-
             var output = new List<SupplierModel>();
 
             using (SqlConnection conn = new SqlConnection(DatabaseConnectionString))
@@ -65,7 +64,6 @@
                         }
                         catch (Exception ex)
                         {
-
                             output.Add(new SupplierModel()
                             {
                                 Id = 0,
@@ -77,7 +75,6 @@
                     }
                     catch (Exception ex)
                     {
-
                         output.Add(new SupplierModel()
                         {
                             Id = 0,
@@ -97,8 +94,8 @@
             }
         }
 
-        public List<ProductModel> RetrieveProducts(string SqlCmd) {
-
+        public List<ProductModel> RetrieveProducts(string SqlCmd)
+        {
             var output = new List<ProductModel>();
 
             using (SqlConnection conn = new SqlConnection(DatabaseConnectionString))
@@ -126,7 +123,7 @@
                                             Code = objValidateString.Validate(reader.GetValue(2)),
                                             Amount = (double)reader.GetValue(3),
                                             SupplierId = reader.GetInt32(4),
-                                            SupplierName =  objValidateString.Validate( reader.GetValue(5)),
+                                            SupplierName = objValidateString.Validate(reader.GetValue(5)),
                                             Error = string.Empty
                                         });
                                     }
@@ -145,7 +142,6 @@
                         }
                         catch (Exception ex)
                         {
-
                             output.Add(new ProductModel()
                             {
                                 Id = 0,
@@ -157,7 +153,6 @@
                     }
                     catch (Exception ex)
                     {
-
                         output.Add(new ProductModel()
                         {
                             Id = 0,
@@ -175,7 +170,6 @@
                     }
                 }
             }
-
         }
     }
 }

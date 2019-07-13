@@ -14,7 +14,6 @@
         /// <returns>The <see cref="string"/></returns>
         public virtual string Validate(object value)
         {
-
             return value.ToString();
         }
     }

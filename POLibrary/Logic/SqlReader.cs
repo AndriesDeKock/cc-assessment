@@ -17,9 +17,7 @@
         /// <returns>The <see cref="SqlDataReader"/></returns>
         public SqlDataReader Process(string SqlCmd, object[,] param, SqlConnection conn)
         {
-
             SqlCommand comm = new SqlCommand(SqlCmd, conn) { CommandType = System.Data.CommandType.StoredProcedure };
-
 
             if (param != null)
             {
@@ -33,7 +31,6 @@
             {
                 conn.Open();
                 return comm.ExecuteReader();
-
             }
             catch (Exception)
             {

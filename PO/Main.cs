@@ -63,5 +63,24 @@
 
             supps.Show();
         }
+
+        private void toolStripButton3_Click(object sender, EventArgs e)
+        {
+            foreach (Form item in Application.OpenForms)
+            {
+                if (item is SearchPO)
+                {
+                    item.Activate();
+                    return;
+                }
+            }
+
+            SearchPO Pos = new SearchPO {
+                MdiParent = this
+            };
+
+            Pos.Show();
+
+        }
     }
 }

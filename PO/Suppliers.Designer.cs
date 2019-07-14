@@ -31,6 +31,7 @@
             this.txtSuppName = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.btnCreateSupplier = new System.Windows.Forms.Button();
+            this.btnCreatePO = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // txtSuppName
@@ -52,7 +53,7 @@
             // 
             // btnCreateSupplier
             // 
-            this.btnCreateSupplier.Location = new System.Drawing.Point(257, 70);
+            this.btnCreateSupplier.Location = new System.Drawing.Point(174, 70);
             this.btnCreateSupplier.Name = "btnCreateSupplier";
             this.btnCreateSupplier.Size = new System.Drawing.Size(75, 23);
             this.btnCreateSupplier.TabIndex = 2;
@@ -60,11 +61,22 @@
             this.btnCreateSupplier.UseVisualStyleBackColor = true;
             this.btnCreateSupplier.Click += new System.EventHandler(this.btnCreateSupplier_Click);
             // 
+            // btnCreatePO
+            // 
+            this.btnCreatePO.Location = new System.Drawing.Point(257, 70);
+            this.btnCreatePO.Name = "btnCreatePO";
+            this.btnCreatePO.Size = new System.Drawing.Size(75, 23);
+            this.btnCreatePO.TabIndex = 3;
+            this.btnCreatePO.Text = "Create PO";
+            this.btnCreatePO.UseVisualStyleBackColor = true;
+            this.btnCreatePO.Click += new System.EventHandler(this.btnCreatePO_Click);
+            // 
             // Suppliers
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(355, 117);
+            this.Controls.Add(this.btnCreatePO);
             this.Controls.Add(this.btnCreateSupplier);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtSuppName);
@@ -87,5 +99,6 @@
         private System.Windows.Forms.TextBox txtSuppName;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnCreateSupplier;
+        private System.Windows.Forms.Button btnCreatePO;
     }
 }

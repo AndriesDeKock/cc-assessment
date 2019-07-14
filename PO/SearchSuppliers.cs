@@ -38,8 +38,11 @@
         /// </summary>
         public static void UnhideForm()
         {
-            thisForm.RetrieveSuppliers();
-            thisForm.Show();
+            if (thisForm != null)
+            {
+                thisForm.RetrieveSuppliers();
+                thisForm.Show();
+            }
         }
 
         /// <summary>

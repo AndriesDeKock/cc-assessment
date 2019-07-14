@@ -38,8 +38,11 @@
         /// </summary>
         public static void UnhideForm()
         {
-            thisForm.RetrieveProducts();
-            thisForm.Show();
+            if (thisForm != null)
+            {
+                thisForm.RetrieveProducts();
+                thisForm.Show();
+            }
         }
 
         /// <summary>
@@ -103,7 +106,7 @@
         /// <param name="dgvProds">The dgvProds<see cref="DataGridView"/></param>
         private void FormatProductDGV(DataGridView dgvProds)
         {
-            foreach (var item in new string[] { "Error", "supplierid" })
+            foreach (var item in new string[] { "Error", "supplierid", "qty" })
             {
                 dgvProds.Columns[item].Visible = false;
             }

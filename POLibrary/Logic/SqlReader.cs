@@ -37,5 +37,33 @@
                 return null;
             }
         }
+
+
+        public object[] ProcessWithOutput(string SqlCmd, object[,] param, SqlConnection conn, string output) {
+
+            SqlCommand comm = new SqlCommand(SqlCmd, conn) { CommandType = System.Data.CommandType.StoredProcedure };
+
+            if (param != null)
+            {
+                for (int i = 0; i <= param.GetUpperBound(0); i++)
+                {
+                    comm.Parameters.AddWithValue(param[i, 0].ToString(), param[i, 1]);
+                }
+
+                comm.Parameters.Add(output, System.Data.SqlDbType.Int).Direction = System.Data.ParameterDirection.Output;
+            }
+
+            try
+            {
+                conn.Open();
+                return new object[] { comm.ExecuteReader(), comm.Parameters[output].Value };
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+
+        }
+
     }
 }

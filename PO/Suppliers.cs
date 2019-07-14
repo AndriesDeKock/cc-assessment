@@ -188,5 +188,24 @@
 
             return true;
         }
+
+        private void btnCreatePO_Click(object sender, EventArgs e)
+        {
+            foreach (Form item in Application.OpenForms)
+            {
+                if (item is PurchaseOrders)
+                {
+                    item.Activate();
+                    return;
+                }
+            }
+
+            PurchaseOrders pos = new PurchaseOrders {
+                MdiParent = this.MdiParent
+            };
+
+            pos.ShowForm(_supplier.Id);
+
+        }
     }
 }

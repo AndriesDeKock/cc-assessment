@@ -47,13 +47,13 @@
             this.dgvSupps.ReadOnly = true;
             this.dgvSupps.RowHeadersVisible = false;
             this.dgvSupps.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvSupps.Size = new System.Drawing.Size(494, 213);
+            this.dgvSupps.Size = new System.Drawing.Size(706, 213);
             this.dgvSupps.TabIndex = 0;
             this.dgvSupps.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvSupps_CellContentClick);
             // 
             // btnNewSupp
             // 
-            this.btnNewSupp.Location = new System.Drawing.Point(440, 243);
+            this.btnNewSupp.Location = new System.Drawing.Point(652, 243);
             this.btnNewSupp.Name = "btnNewSupp";
             this.btnNewSupp.Size = new System.Drawing.Size(75, 33);
             this.btnNewSupp.TabIndex = 1;
@@ -65,7 +65,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(540, 289);
+            this.ClientSize = new System.Drawing.Size(751, 289);
             this.Controls.Add(this.btnNewSupp);
             this.Controls.Add(this.dgvSupps);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;

@@ -204,7 +204,7 @@
                 MdiParent = this.MdiParent
             };
 
-            pos.ShowForm(_supplier.Id);
+            pos.ShowForm(false, _supplier.Id, null);
 
         }
     }

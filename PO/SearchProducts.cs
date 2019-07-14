@@ -106,7 +106,7 @@
         /// <param name="dgvProds">The dgvProds<see cref="DataGridView"/></param>
         private void FormatProductDGV(DataGridView dgvProds)
         {
-            foreach (var item in new string[] { "Error", "supplierid", "qty" })
+            foreach (var item in new string[] { "Error", "supplierid" })
             {
                 dgvProds.Columns[item].Visible = false;
             }

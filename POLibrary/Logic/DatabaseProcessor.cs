@@ -203,6 +203,7 @@
                                             Supplier = objValidateString.Validate(reader.GetValue(2)),
                                             Created = reader.GetDateTime(3),
                                             Amount = (double)reader.GetValue(4),
+                                            SupplierId = reader.GetInt32(5),
                                             Error = string.Empty
                                         });
                                     }
@@ -233,6 +234,89 @@
                     catch (Exception ex)
                     {
                         output.Add(new PurchaseOrderModel()
+                        {
+                            Id = 0,
+                            Error = ex.Message.ToString()
+                        });
+
+                        return output;
+                    }
+                    finally
+                    {
+                        if (conn.State != System.Data.ConnectionState.Closed)
+                        {
+                            conn.Close();
+                        }
+                    }
+                }
+            }
+
+        }
+
+        public List<PurchaseOrderDetailModel> RetrievPOSDetail(string SqlCmd, int PurchaseOrderId) {
+
+            var output = new List<PurchaseOrderDetailModel>();
+
+            using (SqlConnection conn = new SqlConnection(DatabaseConnectionString))
+            {
+                using (SqlCommand comm = new SqlCommand(SqlCmd, conn) { CommandType = System.Data.CommandType.StoredProcedure })
+                {
+                    comm.Parameters.Clear();
+                    comm.Parameters.Add("@poId", System.Data.SqlDbType.Int).Value = PurchaseOrderId;
+
+                    try
+                    {
+                        conn.Open();
+
+                        try
+                        {
+                            using (SqlDataReader reader = comm.ExecuteReader())
+                            {
+                                if (reader.HasRows)
+                                {
+                                    var objValidateString = new ValidateReaderString();
+
+                                    while (reader.Read())
+                                    {
+                                        output.Add(new PurchaseOrderDetailModel()
+                                        {
+                                            Id = reader.GetInt32(0),
+                                            ProductId = reader.GetInt32(1),
+                                            PurchaseOrderId = reader.GetInt32(2),
+                                            DateCreated = reader.GetDateTime(3),
+                                            Amount = (double)reader.GetValue(4),
+                                            Qty = reader.GetInt32(5),
+                                            ProductDescription = objValidateString.Validate(reader.GetValue(6)),
+                                            Error = string.Empty
+                                        });
+                                    }
+                                }
+                                else
+                                {
+                                    output.Add(new PurchaseOrderDetailModel()
+                                    {
+                                        Id = 0,
+                                        Error = reader.GetString(0)
+                                    });
+                                }
+
+                                return output;
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            output.Add(new PurchaseOrderDetailModel()
+                            {
+                                Id = 0,
+                                Error = ex.Message.ToString()
+                            });
+
+                            return output;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        output.Add(new PurchaseOrderDetailModel()
                         {
                             Id = 0,
                             Error = ex.Message.ToString()

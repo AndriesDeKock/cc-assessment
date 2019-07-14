@@ -45,6 +45,7 @@
     <Compile Include="Logic\StringValidator.cs" />
     <Compile Include="Logic\SqlReader.cs" />
     <Compile Include="Model\ProductModel.cs" />
+    <Compile Include="Model\PurchaseOrderDetailModel.cs" />
     <Compile Include="Model\PurchaseOrderModel.cs" />
     <Compile Include="Model\SupplierModel.cs" />
     <Compile Include="Model\PurchaseOrderDto.cs" />

@@ -71,7 +71,7 @@ namespace PO
 
         private void FormatProductDGV(DataGridView dgvPO) {
 
-            foreach (var item in new string[] { "Error" })
+            foreach (var item in new string[] { "Error", "SupplierId" })
             {
                 dgvPO.Columns[item].Visible = false;
             }
@@ -99,6 +99,29 @@ namespace PO
                 dgvPO.Columns["colOpen"].Width) - 20;
 
         }
-       
+
+        private void dgvPO_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex > -1 && e.ColumnIndex == dgvPO.Columns["colOpen"].Index)
+            {
+                foreach (Form item in Application.OpenForms)
+                {
+                    if (item is PurchaseOrders)
+                    {
+                        item.Activate();
+                        return;
+                    }
+                }
+
+                PurchaseOrders pos = new PurchaseOrders {
+                    MdiParent = this.MdiParent
+                };
+
+                var purchaseOrder = _purchaseOrders.Single(po => po.Id == Convert.ToInt32(dgvPO.Rows[e.RowIndex].Cells["id"].Value));
+
+                Hide();
+                pos.ShowForm(true, purchaseOrder.SupplierId, purchaseOrder);
+            }
+        }
     }
 }

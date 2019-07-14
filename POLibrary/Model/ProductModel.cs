@@ -11,7 +11,5 @@ namespace POLibrary.Model
         public double Amount { get; set; }
         public string Code { get; set; }
         public string Error { get; set; }
-
-        public int Qty { get; set; }
     }
 }

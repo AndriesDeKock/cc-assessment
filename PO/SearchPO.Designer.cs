@@ -48,6 +48,7 @@
             this.dgvPO.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvPO.Size = new System.Drawing.Size(751, 245);
             this.dgvPO.TabIndex = 4;
+            this.dgvPO.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvPO_CellContentClick);
             // 
             // SearchPO
             // 

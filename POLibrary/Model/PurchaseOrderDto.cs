@@ -11,6 +11,6 @@ namespace POLibrary.Model
     {
         public int Id { get; set; }
         public string Description { get; set; }
-        public List<ProductModel> product { get; set; }
+        public List<PurchaseOrderDetailModel> productDetail { get; set; }
     }
 }

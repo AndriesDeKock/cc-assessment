@@ -56,6 +56,9 @@
         /// <param name="e">The e<see cref="EventArgs"/></param>
         private void PurchaseOrders_Load(object sender, EventArgs e)
         {
+
+            this.Text = string.Concat("Purchase Order - ", _purchaseOrder.Supplier);
+
             RetrieveProducts();
             PopulatePurchaseOrder();
 

@@ -202,7 +202,7 @@
                                             Description = objValidateString.Validate(reader.GetValue(1)),
                                             Supplier = objValidateString.Validate(reader.GetValue(2)),
                                             Created = reader.GetDateTime(3),
-                                            Amount = (double)reader.GetValue(4),
+                                            Amount =  (reader.GetValue(4) == DBNull.Value)? 0 : (double)reader.GetValue(4),
                                             SupplierId = reader.GetInt32(5),
                                             Error = string.Empty
                                         });

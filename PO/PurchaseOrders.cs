@@ -200,8 +200,6 @@
                         }
                     }
 
-                   
-
                     RemovePurchaseOrderItem(Convert.ToInt32(dgvItems.Rows[e.RowIndex].Cells["id"].Value));
                 }
             }
@@ -375,15 +373,24 @@
 
                 Invoke((MethodInvoker)delegate
                 {
-                    dgvItems.DataSource = new BindingList<PurchaseOrderDetailModel>(_purchaseOrderDetail);
 
-                    _purchaseOrderDto.productDetail = _purchaseOrderDetail;
-                    FormatItems(dgvItems);
-
-                    if (dgvItems.Rows.Count > 0)
+                    if (_purchaseOrderDetail.Count >= 1)
                     {
-                        dgvItems_CellContentClick(dgvItems, new DataGridViewCellEventArgs(dgvItems.Columns["colSelect"].Index, 0));
+                        if (_purchaseOrderDetail[0].Id != 0)
+                        {
+                            dgvItems.DataSource = new BindingList<PurchaseOrderDetailModel>(_purchaseOrderDetail);
+
+                            _purchaseOrderDto.productDetail = _purchaseOrderDetail;
+                            FormatItems(dgvItems);
+
+                            if (dgvItems.Rows.Count > 0)
+                            {
+                                dgvItems_CellContentClick(dgvItems, new DataGridViewCellEventArgs(dgvItems.Columns["colSelect"].Index, 0));
+                            }
+                        }
                     }
+
+                   
                 });
             });
         }
@@ -465,6 +472,7 @@
 
                     Invoke((MethodInvoker)delegate
                     {
+                        MessageBox.Show("Purchase order updated", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         RetrievePurchaseOrderDetail();
                     });
                 });

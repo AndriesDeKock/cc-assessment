@@ -30,7 +30,7 @@
         {
             this.txtSuppName = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.btnCreateSupplier = new System.Windows.Forms.Button();
+            this.btnSaveSupps = new System.Windows.Forms.Button();
             this.btnCreatePO = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
@@ -51,15 +51,15 @@
             this.label1.TabIndex = 1;
             this.label1.Text = "Name:";
             // 
-            // btnCreateSupplier
+            // btnSaveSupps
             // 
-            this.btnCreateSupplier.Location = new System.Drawing.Point(174, 70);
-            this.btnCreateSupplier.Name = "btnCreateSupplier";
-            this.btnCreateSupplier.Size = new System.Drawing.Size(75, 23);
-            this.btnCreateSupplier.TabIndex = 2;
-            this.btnCreateSupplier.Text = "Save";
-            this.btnCreateSupplier.UseVisualStyleBackColor = true;
-            this.btnCreateSupplier.Click += new System.EventHandler(this.btnCreateSupplier_Click);
+            this.btnSaveSupps.Location = new System.Drawing.Point(174, 70);
+            this.btnSaveSupps.Name = "btnSaveSupps";
+            this.btnSaveSupps.Size = new System.Drawing.Size(75, 23);
+            this.btnSaveSupps.TabIndex = 2;
+            this.btnSaveSupps.Text = "Save";
+            this.btnSaveSupps.UseVisualStyleBackColor = true;
+            this.btnSaveSupps.Click += new System.EventHandler(this.btnCreateSupplier_Click);
             // 
             // btnCreatePO
             // 
@@ -77,7 +77,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(355, 117);
             this.Controls.Add(this.btnCreatePO);
-            this.Controls.Add(this.btnCreateSupplier);
+            this.Controls.Add(this.btnSaveSupps);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtSuppName);
             this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -98,7 +98,7 @@
 
         private System.Windows.Forms.TextBox txtSuppName;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button btnCreateSupplier;
+        private System.Windows.Forms.Button btnSaveSupps;
         private System.Windows.Forms.Button btnCreatePO;
     }
 }

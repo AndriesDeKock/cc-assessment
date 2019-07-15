@@ -72,7 +72,7 @@
         {
             if (_supplier != null)
             {
-                btnCreateSupplier.Text = "Update";
+                btnSaveSupps.Text = "Update";
                 txtSuppName.Text = _supplier.Name;
                 Application.DoEvents();
             }
@@ -132,6 +132,9 @@
         /// <param name="e">The e<see cref="EventArgs"/></param>
         private void Suppliers_Load(object sender, EventArgs e)
         {
+            btnCreatePO.Visible = (_edit) ? true : false;
+            btnSaveSupps.Location = (_edit) ?  new System.Drawing.Point(174, 70) : new System.Drawing.Point(257, 70);
+
             PopulateSupplier();
         }
 

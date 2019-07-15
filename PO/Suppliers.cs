@@ -132,7 +132,7 @@
         /// <param name="e">The e<see cref="EventArgs"/></param>
         private void Suppliers_Load(object sender, EventArgs e)
         {
-            btnCreatePO.Visible = (_edit) ? true : false;
+            btnCreatePO.Visible = _edit;
             btnSaveSupps.Location = (_edit) ?  new System.Drawing.Point(174, 70) : new System.Drawing.Point(257, 70);
 
             PopulateSupplier();

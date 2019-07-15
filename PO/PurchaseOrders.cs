@@ -188,14 +188,19 @@
             {
                 if (MessageBox.Show("Are you sure you want to remove this item?", "Remove?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
-                    var prodDetail = _purchaseOrderDto.productDetail.SingleOrDefault(p => p.rowId == dgvItems.Rows[e.RowIndex].Cells["rowId"].Value.ToString());
-                    if (prodDetail != null)
+                    if (dgvItems.Rows[e.RowIndex].Cells["rowId"].Value != null)
                     {
-                        dgvItems.Rows.Remove(dgvItems.Rows[e.RowIndex]);
-                        _purchaseOrderDto.productDetail.Remove(prodDetail);
-                        txtqty.Text = 1.ToString();
-                        return;
+                        var prodDetail = _purchaseOrderDto.productDetail.SingleOrDefault(p => p.rowId == dgvItems.Rows[e.RowIndex].Cells["rowId"].Value.ToString());
+                        if (prodDetail != null)
+                        {
+                            dgvItems.Rows.Remove(dgvItems.Rows[e.RowIndex]);
+                            _purchaseOrderDto.productDetail.Remove(prodDetail);
+                            txtqty.Text = 1.ToString();
+                            return;
+                        }
                     }
+
+                   
 
                     RemovePurchaseOrderItem(Convert.ToInt32(dgvItems.Rows[e.RowIndex].Cells["id"].Value));
                 }
@@ -314,6 +319,7 @@
                     {
                         Invoke((MethodInvoker)delegate
                         {
+                            MessageBox.Show("Purchase order item removed", "Removed", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             RetrievePurchaseOrderDetail();
                         });
 
